@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { ArrowRight, Award, BookOpenCheck, ClipboardCheck, Map, PlayCircle, Trash2 } from 'lucide-react'
+import { ArrowRight, Award, BookOpenCheck, ClipboardCheck, Map, PenLine, PlayCircle, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -16,6 +16,7 @@ import {
 import { Progress } from '@/components/ui/progress'
 import { glossary } from '@/data/glossary'
 import { allLessons, lessonById, stageLessonIds, stages } from '@/data/roadmap'
+import { sectionKey, writingChapters } from '@/data/writing'
 import { progressActions, useProgress } from '@/hooks/useProgress'
 
 export function DashboardPage() {
@@ -34,6 +35,8 @@ export function DashboardPage() {
 
   const test = progress.testResult
   const knownTerms = glossary.filter((term) => progress.knownTerms[term.id]).length
+  const writingKeys = writingChapters.flatMap((c) => c.sections.map((s) => sectionKey(c.id, s.id)))
+  const writingRead = writingKeys.filter((k) => progress.writingRead[k]).length
 
   return (
     <div className="space-y-8">
@@ -134,6 +137,26 @@ export function DashboardPage() {
           <Card>
             <CardHeader>
               <CardDescription className="flex items-center gap-2">
+                <PenLine className="size-4" /> Giáo trình IELTS Writing Task 2
+              </CardDescription>
+              <CardTitle>5 dạng bài · Band 6.0 – 9.0</CardTitle>
+              <CardDescription>
+                Đã đọc {writingRead}/{writingKeys.length} phần
+              </CardDescription>
+              <Progress value={(writingRead / writingKeys.length) * 100} className="mt-2 h-1.5" aria-label="Tiến độ Writing Task 2" />
+            </CardHeader>
+            <CardFooter className="border-t pt-4">
+              <Button variant="outline" asChild>
+                <Link to="/writing">
+                  {writingRead === 0 ? 'Bắt đầu học' : 'Học tiếp'} <ArrowRight />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardDescription className="flex items-center gap-2">
                 <ClipboardCheck className="size-4" /> Bài test xếp trình độ
               </CardDescription>
               {test ? (
@@ -169,8 +192,8 @@ export function DashboardPage() {
             <DialogHeader>
               <DialogTitle>Xoá toàn bộ tiến độ?</DialogTitle>
               <DialogDescription>
-                Các bài đã đánh dấu, ghi chú, thuật ngữ đã thuộc, checklist chứng chỉ và kết quả bài test sẽ bị xoá khỏi trình duyệt này.
-                Không thể hoàn tác.
+                Các bài đã đánh dấu, ghi chú, thuật ngữ đã thuộc, checklist chứng chỉ, tiến độ Writing Task 2 và kết quả bài test sẽ bị xoá khỏi trình duyệt này.
+                Bản sửa giáo trình Writing vẫn được giữ. Không thể hoàn tác.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>

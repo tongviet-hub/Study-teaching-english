@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Award, ClipboardCheck, GraduationCap, Languages, LayoutDashboard, Map, Menu } from 'lucide-react'
+import { Award, ClipboardCheck, GraduationCap, Languages, LayoutDashboard, Map, Menu, PenLine } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 const navItems = [
   { to: '/', label: 'Tổng quan', icon: LayoutDashboard, end: true },
   { to: '/roadmap', label: 'Lộ trình', icon: Map },
+  { to: '/writing', label: 'Writing T2', icon: PenLine },
   { to: '/test', label: 'Bài test', icon: ClipboardCheck },
   { to: '/glossary', label: 'Thuật ngữ', icon: Languages },
   { to: '/certificates', label: 'Chứng chỉ', icon: Award },

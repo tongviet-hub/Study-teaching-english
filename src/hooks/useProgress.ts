@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import type { StageScore } from '@/data/placementTest'
+import type { Block } from '@/data/writing/types'
 
 export type TestResult = {
   date: string
@@ -19,6 +20,10 @@ export type ProgressState = {
   lessonLang: LessonLang
   lastLessonId: string | null
   testResult: TestResult | null
+  // Giáo trình Writing Task 2: bản sửa ghi đè theo từng phần, phần đã đọc, ô checklist đã tick.
+  writingEdits: Record<string, Block[]>
+  writingRead: Record<string, string>
+  writingChecks: Record<string, boolean>
 }
 
 const STORAGE_KEY = 'su-pham-tieng-anh:progress:v1'
@@ -31,6 +36,9 @@ const emptyState: ProgressState = {
   lessonLang: 'vi',
   lastLessonId: null,
   testResult: null,
+  writingEdits: {},
+  writingRead: {},
+  writingChecks: {},
 }
 
 function load(): ProgressState {
@@ -87,8 +95,33 @@ export const progressActions = {
   saveTestResult(result: TestResult) {
     setState((s) => ({ ...s, testResult: result }))
   },
+  saveWritingSection(key: string, blocks: Block[]) {
+    setState((s) => ({ ...s, writingEdits: { ...s.writingEdits, [key]: blocks } }))
+  },
+  resetWritingSection(key: string) {
+    setState((s) => {
+      const writingEdits = { ...s.writingEdits }
+      delete writingEdits[key]
+      return { ...s, writingEdits }
+    })
+  },
+  importWritingEdits(edits: Record<string, Block[]>) {
+    setState((s) => ({ ...s, writingEdits: edits }))
+  },
+  toggleWritingRead(key: string, done: boolean) {
+    setState((s) => {
+      const writingRead = { ...s.writingRead }
+      if (done) writingRead[key] = new Date().toISOString()
+      else delete writingRead[key]
+      return { ...s, writingRead }
+    })
+  },
+  toggleWritingCheck(key: string, done: boolean) {
+    setState((s) => ({ ...s, writingChecks: { ...s.writingChecks, [key]: done } }))
+  },
   reset() {
-    setState(() => emptyState)
+    // Bản sửa giáo trình là nội dung chứ không phải tiến độ, nên được giữ lại.
+    setState((s) => ({ ...emptyState, writingEdits: s.writingEdits }))
   },
 }
 

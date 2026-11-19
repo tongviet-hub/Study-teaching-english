@@ -7,6 +7,8 @@ import { LessonPage } from '@/pages/LessonPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { PlacementTestPage } from '@/pages/PlacementTestPage'
 import { RoadmapPage } from '@/pages/RoadmapPage'
+import { WritingChapterPage } from '@/pages/WritingChapterPage'
+import { WritingPage } from '@/pages/WritingPage'
 
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
         <Route index element={<DashboardPage />} />
         <Route path="roadmap" element={<RoadmapPage />} />
         <Route path="lesson/:id" element={<LessonPage />} />
+        <Route path="writing" element={<WritingPage />} />
+        <Route path="writing/:chapterId" element={<WritingChapterPage />} />
         <Route path="test" element={<PlacementTestPage />} />
         <Route path="glossary" element={<GlossaryPage />} />
         <Route path="certificates" element={<CertificatesPage />} />
